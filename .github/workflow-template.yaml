@@ -1,0 +1,44 @@
+name: '{{SERVICE}}'
+
+on:
+  push:
+    paths:
+      - 'packages/{{SERVICE}}/**'
+      - '.github/workflows/{{SERVICE}}.yaml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      VITE_PAYPAL_CLIENT: ${{ secrets.{{SECRET}}_VITE_PAYPAL_CLIENT }}
+      VITE_PAYPAL_SECRET: ${{ secrets.{{SECRET}}_VITE_PAYPAL_SECRET }}
+      NODE_ENV: test
+      LOG_LEVEL: ${{ secrets.{{SECRET}}_LOG_LEVEL }}
+      API_HOST: ${{ secrets.{{SECRET}}_API_HOST }}
+      API_PORT: ${{ secrets.{{SECRET}}_API_PORT }}
+      MONGO_URI: ${{ secrets.{{SECRET}}_MONGO_URI }}
+      ALLOW_ORIGIN: ${{ secrets.{{SECRET}}_ALLOW_ORIGIN }}
+      JWT_TOKEN: ${{ secrets.{{SECRET}}_JWT_TOKEN }}
+      ADMIN_PWD: ${{ secrets.{{SECRET}}_ADMIN_PWD }}
+      PROD_URL: ${{ secrets.{{SECRET}}_PROD_URL }}
+      BUCKET_ENDPOINT: ${{ secrets.{{SECRET}}_BUCKET_ENDPOINT }}
+      BUCKET_ID: ${{ secrets.{{SECRET}}_BUCKET_ID }}
+      BUCKET_ACCESS: ${{ secrets.{{SECRET}}_BUCKET_ACCESS }}
+      BUCKET_SECRET: ${{ secrets.{{SECRET}}_BUCKET_SECRET }}
+      PAYMENT_SERVER: ${{ secrets.{{SECRET}}_PAYMENT_SERVER }}
+      AUTH_SERVER: ${{ secrets.{{SECRET}}_AUTH_SERVER }}
+      STRIPE_PUB_KEY: ${{ secrets.{{SECRET}}_STRIPE_PUB_KEY }}
+      STRIPE_KEY: ${{ secrets.{{SECRET}}_STRIPE_KEY }}
+      STRIPE_WEBHOOK_SECRET: ${{ secrets.{{SECRET}}_STRIPE_WEBHOOK_SECRET }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |-
+          npm i -g pnpm
+          cd packages/{{SERVICE}}
+          pnpm i
+          pnpm test

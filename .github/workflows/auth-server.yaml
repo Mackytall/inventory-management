@@ -1,0 +1,44 @@
+name: 'auth-server'
+
+on:
+  push:
+    paths:
+      - 'packages/auth-server/**'
+      - '.github/workflows/auth-server.yaml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      VITE_PAYPAL_CLIENT: ${{ secrets.AUTH_SERVER_VITE_PAYPAL_CLIENT }}
+      VITE_PAYPAL_SECRET: ${{ secrets.AUTH_SERVER_VITE_PAYPAL_SECRET }}
+      NODE_ENV: test
+      LOG_LEVEL: ${{ secrets.AUTH_SERVER_LOG_LEVEL }}
+      API_HOST: ${{ secrets.AUTH_SERVER_API_HOST }}
+      API_PORT: ${{ secrets.AUTH_SERVER_API_PORT }}
+      MONGO_URI: ${{ secrets.AUTH_SERVER_MONGO_URI }}
+      ALLOW_ORIGIN: ${{ secrets.AUTH_SERVER_ALLOW_ORIGIN }}
+      JWT_TOKEN: ${{ secrets.AUTH_SERVER_JWT_TOKEN }}
+      ADMIN_PWD: ${{ secrets.AUTH_SERVER_ADMIN_PWD }}
+      PROD_URL: ${{ secrets.AUTH_SERVER_PROD_URL }}
+      BUCKET_ENDPOINT: ${{ secrets.AUTH_SERVER_BUCKET_ENDPOINT }}
+      BUCKET_ID: ${{ secrets.AUTH_SERVER_BUCKET_ID }}
+      BUCKET_ACCESS: ${{ secrets.AUTH_SERVER_BUCKET_ACCESS }}
+      BUCKET_SECRET: ${{ secrets.AUTH_SERVER_BUCKET_SECRET }}
+      PAYMENT_SERVER: ${{ secrets.AUTH_SERVER_PAYMENT_SERVER }}
+      AUTH_SERVER: ${{ secrets.AUTH_SERVER_AUTH_SERVER }}
+      STRIPE_PUB_KEY: ${{ secrets.AUTH_SERVER_STRIPE_PUB_KEY }}
+      STRIPE_KEY: ${{ secrets.AUTH_SERVER_STRIPE_KEY }}
+      STRIPE_WEBHOOK_SECRET: ${{ secrets.AUTH_SERVER_STRIPE_WEBHOOK_SECRET }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |-
+          npm i -g pnpm
+          cd packages/auth-server
+          pnpm i
+          pnpm test
